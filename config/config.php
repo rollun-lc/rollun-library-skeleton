@@ -7,26 +7,28 @@ use Zend\ConfigAggregator\PhpFileProvider;
 // Make environment variables stored in .env accessible via getenv(), $_ENV or $_SERVER.
 (new Dotenv())->load('.env');
 
-// Determine application environment ('dev' or 'prod').
+// Determine application environment ('dev', 'test' or 'prod').
 $appEnv = getenv('APP_ENV');
 
 $aggregator = new ConfigAggregator([
     // Include your config providers here.
     // ...
 
-    // Load config according to chosen environment.
-    //   - `dev.php`
-    //   - `*.dev.php`
-    //   - `prod.php`
-    //   - `*.prod.php`
-    new PhpFileProvider(realpath(__DIR__) . "/autoload/{,*.}{$appEnv}.php"),
+    // Default App module config
+    // Load application config in a pre-defined order in such a way that local settings
+    // overwrite global settings. (Loaded as first to last):
+    //   - `global.php`
+    //   - `*.global.php`
+    //   - `local.php`
+    //   - `*.local.php`
+    new PhpFileProvider('config/autoload/{{,*.}global,{,*.}local}.php'),
 
     // Load application config according to environment:
-    //   - `dev.global.php`,   `test.global.php`,   `prod.global.php`
-    //   - `*.dev.global.php`, `*.test.global.php`, `*.prod.global.php`
-    //   - `dev.local.php`,    `testlocal.php`,     `prod.local.php`
-    //   - `*.dev.local.php`,  `*.test.local.php`,  `*.prod.local.php`
-    new PhpFileProvider(realpath(__DIR__) . "/autoload/{{,*.}{$appEnv}.global,{,*.}{$appEnv}.local}.php"),
+    //   - `global.dev.php`,   `global.test.php`,   `prod.global.prod.php`
+    //   - `*.global.dev.php`, `*.global.test.php`, `*.prod.global.prod.php`
+    //   - `local.dev.php`,    `local.test.php`,     `prod.local.prod.php`
+    //   - `*.local.dev.php`,  `*.local.test.php`,  `*.prod.local.prod.php`
+    new PhpFileProvider(realpath(__DIR__) . "/autoload/{{,*.}global.{$appEnv},{,*.}local.{$appEnv}}.php"),
 ]);
 
 return $aggregator->getMergedConfig();

@@ -30,6 +30,7 @@
         }
     },
     "scripts": {
+        "test": "phpunit --colors=always",
         "clear-config-cache": "php bin/clear-config-cache.php",
         "code-sniffer": "phpcs .",
         "code-beautiful": "phpcbf .",

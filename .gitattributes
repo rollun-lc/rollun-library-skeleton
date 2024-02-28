@@ -1,0 +1,8 @@
+/config/ export-ignore
+/example/ export-ignore
+/public/ export-ignore
+/test/ export-ignore
+/.env.dist
+/docker-compose.yml export-ignore
+/Makefile export-ignore
+/phpunit.xml.dist export-ignore

@@ -20,13 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-
+            "Rollun\\Package\\": "src/Package/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "test\\": "test/",
-            "example\\": "example/"
+            "Rollun\\Test\\": "test/"
         }
     },
     "scripts": {
